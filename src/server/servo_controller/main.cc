@@ -42,6 +42,35 @@ namespace Servo_Controller {
 	    }
 	}
 
+	void set_speed(unsigned char channel, unsigned short speed) {
+	    unsigned char command[] = {0xAA, 0xC, 0x07, channel,
+				       speed & 0x7F, speed >> 7 & 0x7F };
+	    if(_terminal->write(command, sizeof(command)) < sizeof(command))
+	    {
+		PDBG("error writing");
+	    }
+	}
+
+	void set_acceleration(unsigned char channel, unsigned short acc) {
+	    unsigned char command[] = {0xAA, 0xC, 0x09, channel,
+				       acc & 0x7F, acc >> 7 & 0x7F };
+	    if(_terminal->write(command, sizeof(command)) < sizeof(command))
+	    {
+		PDBG("error writing");
+	    }
+	}
+
+	// untested
+	void set_pwm(unsigned char channel, unsigned short on_time, unsigned short period) {
+		unsigned char command[] = {0xAA, 0xC, 0x0A, channel,
+					   on_time & 0x7F, on_time >> 7 & 0x7F,
+					   period & 0x7F, period >> 7 & 0x7F };
+		if(_terminal->write(command, sizeof(command)) < sizeof(command))
+		{
+		    PDBG("error writing");
+		}
+	}
+
 	int get_position(unsigned char channel) {
 	    unsigned char command[] = {0xAA, 0xC, 0x10, channel};
 	    unsigned char response[2];
@@ -61,6 +90,26 @@ namespace Servo_Controller {
 	    }
 
 	    return response[0] + 256*response[1];
+	}
+
+	unsigned char get_moving_state(void) {
+	    unsigned char command[] = {0xAA, 0xc, 0x13};
+	    unsigned char response;
+	    if(_terminal->write(command, sizeof(command)) < sizeof(command))
+	    {
+		PDBG("error writing");
+		return -1;
+	    }
+
+	    // todo: sig_rec->wait_for_singnal()
+	    _timer->msleep(1000);
+
+	    if(_terminal->read(&response, 1) != 1)
+	    {
+		PDBG("error reading");
+		return -1;
+	    }
+	    return response;
 	}
     };
 
