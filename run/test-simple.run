@@ -1,0 +1,80 @@
+#
+# Build
+#
+set build_components {
+	core init
+	drivers/timer
+	drivers/usb
+	drivers/gpio
+	server/usb_terminal
+	server/servo_controller
+	test/simple
+}
+
+build $build_components
+
+create_boot_directory
+
+#
+# Generate config
+#
+
+append config {
+<config>
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="RAM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="IO_PORT"/>
+		<service name="CAP"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+		<service name="SIGNAL" />
+	</parent-provides>
+	<default-route>
+		<any-service> <parent/> <any-child/> </any-service>
+	</default-route>
+	<start name="gpio_drv">
+		<resource name="RAM" quantum="4M"/>
+		<provides><service name="Gpio"/></provides>
+	</start>
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+	</start>
+	<start name="usb_drv">
+		<resource name="RAM" quantum="7M"/>
+		<provides><service name="Usb"/></provides>
+		<config uhci="yes" ehci="yes" xhci="yes">
+			<raw/>
+		</config>
+	</start>
+	<start name="usb_terminal">
+		<resource name="RAM" quantum="2M"/>
+		<provides><service name="Terminal"/></provides>
+	</start>
+	<start name="servo_controller">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Servo Controller"/></provides>
+	</start>
+	<start name="test_simple">
+		<resource name="RAM" quantum="1M"/>
+	</start>
+   </config>}
+
+install_config $config
+
+#
+# Boot modules
+#
+
+# generic modules
+set boot_modules {
+	core init timer gpio_drv usb_drv usb_terminal
+	servo_controller test_simple
+}
+
+build_boot_image $boot_modules
