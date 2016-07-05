@@ -1,15 +1,26 @@
 #
+# Check if USB_RAW_DEVICE is set for Qemu
+#
+#if {![info exists ::env(USB_RAW_DEVICE)] && [have_include power_on/qemu]} {
+#        puts "\nPlease define USB_RAW_DEVICE environment variable and set it to your USB device <bus.device>\n"
+#        exit 0
+#}
+
+
+#
 # Build
 #
 set build_components {
 	core init
 	drivers/timer
 	drivers/usb
-	drivers/gpio
 	server/usb_terminal
 	server/servo_controller
 	test/simple
 }
+
+source ${genode_dir}/repos/base/run/platform_drv.inc
+append_platform_drv_build_components
 
 build $build_components
 
@@ -37,10 +48,6 @@ append config {
 	<default-route>
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
-	<start name="gpio_drv">
-		<resource name="RAM" quantum="4M"/>
-		<provides><service name="Gpio"/></provides>
-	</start>
 	<start name="timer">
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
@@ -62,8 +69,12 @@ append config {
 	</start>
 	<start name="test_simple">
 		<resource name="RAM" quantum="1M"/>
-	</start>
-   </config>}
+	</start>}
+
+append_platform_drv_config
+
+append config {
+  </config>}
 
 install_config $config
 
@@ -73,8 +84,15 @@ install_config $config
 
 # generic modules
 set boot_modules {
-	core init timer gpio_drv usb_drv usb_terminal
+	core init timer usb_drv usb_terminal
 	servo_controller test_simple
 }
 
+append_platform_drv_boot_modules
+
 build_boot_image $boot_modules
+
+append qemu_args " -m 256 -usb -usbdevice host:067b:2303 -nographic"
+append qemu_args " -monitor telnet:127.0.0.1:1234,server,nowait"
+
+run_genode_until forever
