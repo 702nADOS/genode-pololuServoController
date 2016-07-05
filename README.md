@@ -16,11 +16,12 @@ Pololu Mini Maestro 12 Servo Controller Code for the Genode framework
 
 - uncomment the following line in your build.conf
 ```
+REPOSITORIES += $(GENODE_DIR)/repos/libports
 REPOSITORIES += $(GENODE_DIR)/repos/dde_linux
 ```
 
 - further proceeding 
 ```
-cd repos/dde_linux
-make prepare
+cd repos/libports && make prepare
+cd repos/dde_linux && make prepare
 ```
