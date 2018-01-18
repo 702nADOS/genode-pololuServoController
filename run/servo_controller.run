@@ -8,7 +8,7 @@ set build_components {
 	drivers/gpio
 	server/usb_terminal
 	server/servo_controller
-	test/simple
+	test/ctrl
 }
 
 build $build_components
@@ -60,7 +60,7 @@ append config {
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Servo Controller"/></provides>
 	</start>
-	<start name="test_simple">
+	<start name="test_ctrl">
 		<resource name="RAM" quantum="1M"/>
 	</start>
    </config>}
@@ -74,7 +74,7 @@ install_config $config
 # generic modules
 set boot_modules {
 	core init timer gpio_drv usb_drv usb_terminal
-	servo_controller test_simple
+	servo_controller test_ctrl
 }
 
 build_boot_image $boot_modules
