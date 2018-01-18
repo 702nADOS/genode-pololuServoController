@@ -9,7 +9,10 @@ Pololu Mini Maestro 12 Servo Controller Code for the Genode framework
 +-- src
 |   +-- server
 |   +-- test
-    |   +-- simple
+    |   +-- ctrl
+    +-- app
+    |   +-- net\_servo\_adapter
+    |   +-- net\_servo\_client
 ```
 
 ## Prerequisites
