@@ -60,7 +60,7 @@ void Mqtt_Entity::on_publish(int mid) {
 
 void Mqtt_Entity::on_message(const struct mosquitto_message *message) {
     char *msg = (char*) message->payload;
-    PDBG("Mqtt_Entity - message received %s", msg);
+    //PDBG("Mqtt_Entity - message received %s", msg);
     strncpy(cmd, msg, sizeof(cmd));
     sem_post(&msg_sem);
 }

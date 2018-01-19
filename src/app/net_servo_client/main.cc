@@ -14,10 +14,12 @@ extern "C" {
 #include <lwip/genode.h>
 #include <nic/packet_allocator.h>
 
-#include <servo_session/client.h>
-#include <servo_session/connection.h>
-#include "../../mqtt/mqtt_entity.h"
+//#include <servo_session/client.h>
+//#include <servo_session/connection.h>
+//#include "../../mqtt/mqtt_entity.h"
 
+#include <servo_controller_session/connection.h>
+#include "mqtt_entity.h"
 
 int main(void)
 {
@@ -68,19 +70,28 @@ int main(void)
 
     char ip_addr[16] = {0};
     char port[5] = {0};
+    char id[16] = {0};
+    char topic[16] = {0};
+    char subscribe[16] = {0};
     mosquitto.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
     mosquitto.attribute("port").value(port, sizeof(port));
+    mosquitto.attribute("id").value(id,sizeof(id));
+    mosquitto.attribute("topic").value(topic,sizeof(topic));
+    mosquitto.attribute("subscribe").value(subscribe,sizeof(subscribe));
 
     PDBG("Connecting to MQTT server");
-    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("rpi", "car-status", ip_addr);
-    mqtt_entity->my_subscribe("car-servo");
+    // Mqtt_Entity *mqtt_entity = new Mqtt_Entity("rpi", "car-status", ip_addr);
+    Mqtt_Entity *mqtt_entity = new Mqtt_Entity(id, topic, ip_addr);
+    mqtt_entity->my_subscribe(subscribe);
+    //mqtt_entity->my_subscribe("car-servo");
 
     /*
      * Servo connection
      */
     PDBG("Servo init");
-    static Servo::Connection servo;
-
+    //static Servo::Connection servo;
+    static Servo_Controller::Connection servo_controller;
+    
     /*
      * Handle mqtt messages
      */
@@ -101,7 +112,8 @@ int main(void)
             continue;
         }
 
-        servo.setTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
+        //servo.setTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
+        servo_controller.set_target(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
     }
 
     sleep_forever();
