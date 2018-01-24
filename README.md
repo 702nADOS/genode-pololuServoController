@@ -40,7 +40,7 @@ GENODE_TARGET=focnados_panda make jenkins_build_dir
 5. Edit the ```etc/build.conf``` in each build directory by adding the following lines
 ```
 REPOSITORIES += $(GENODE_DIR)/repos/genode-world
-REPOSITORIES += $(GENODE_DIR)/../genode-pololuServoController
+REPOSITORIES += $(GENODE_DIR)/repos/genode-pololuServoController
 ```
 
 6. Prepare the missing ports by executing (again in operating-system directory)
@@ -48,18 +48,13 @@ REPOSITORIES += $(GENODE_DIR)/../genode-pololuServoController
 ./genode/tool/ports/prepare_port libmosquitto openssl
 ```
 
-7. Change to the individual build directories and trigger the compilation
-
-- In ```genode-focnados_rpi``` build directory:
+7. Trigger the compilation
 
 ```
-make run/net_servo_client
+make -C build/genode-focnados_rpi run/servo_client
+make -C build/genode-focnaods_panda run/servo_adapter
 ```
 
-- In ```genode-focnados_panda``` build directory:
-```
-make run/net_servo_adapter
-```
 
 ## Prerequisites (legacy)
 
