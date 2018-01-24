@@ -28,7 +28,7 @@ git clone https://github.com/argos-research/genode-world.git genode/repos/genode
 
 3. Clone this repository into genode/repos (assuming you are in the operating-system directory)
 ```
-git clone https://github.com/argos-research/genode-pololuServoController.git 
+git clone https://github.com/argos-research/genode-pololuServoController.git genode/repos/genode-pololuServoController
 ```
 
 4. Create a build directory for a rpi and a panda build
