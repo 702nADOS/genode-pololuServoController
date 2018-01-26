@@ -36,7 +36,8 @@ namespace Servo_Controller {
 	void set_target(unsigned char channel, unsigned short target) {
 	    unsigned char command[]  = {0xAA, 0xC, 0x04, channel,
 					target & 0x7F, target >> 7 & 0x7F};
-	    if(_terminal->write(command, sizeof(command)) < sizeof(command))
+	    
+		if(_terminal->write(command, sizeof(command)) < sizeof(command))
 	    {
 		PDBG("error writing");
 	    }

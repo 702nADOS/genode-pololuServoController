@@ -79,7 +79,7 @@ int main(void)
     mosquitto.attribute("topic").value(topic,sizeof(topic));
     mosquitto.attribute("subscribe").value(subscribe,sizeof(subscribe));
 
-    PDBG("Connecting to MQTT server");
+    PDBG("Connecting to MQTT server %s %s %s", id, topic, subscribe);
     // Mqtt_Entity *mqtt_entity = new Mqtt_Entity("rpi", "car-status", ip_addr);
     Mqtt_Entity *mqtt_entity = new Mqtt_Entity(id, topic, ip_addr);
     mqtt_entity->my_subscribe(subscribe);
@@ -99,6 +99,7 @@ int main(void)
     char *split, *channel, *target;
     while (true) {
         mqtt_entity->wait_msg();
+        //PDBG("semaphore clean");
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
         split = strtok(recv_cmd, ",");

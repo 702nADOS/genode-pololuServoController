@@ -52,7 +52,7 @@ set config {
 		<resource name="RAM" quantum="4M"/>
 		<config>
 			<network dhcp="yes" ip-address="192.168.100.42" subnet-mask="255.255.255.0" default-gateway="192.168.100.254" />
-			<mosquitto ip-address="10.200.32.15" port="1883" id="panda" topic="car-servo" subscribe="car-control"/>
+			<mosquitto ip-address="10.200.32.75" port="1883" id="panda" topic="car-servo" subscribe="car-control"/>
         	</config>
 	</start>
 
@@ -77,7 +77,7 @@ append_if $use_usb_driver config {
       <service name="Nic"/>
     </provides>
     <config uhci="yes" ehci="yes" xhci="yes">
-      <nic mac="02:00:00:00:01:01"/>
+      <nic mac="0A:02:00:00:00:02"/>
     </config>
   </start>
 }

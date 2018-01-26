@@ -120,8 +120,8 @@ int main(void)
     mosquitto.attribute("id").value(id,sizeof(id));
     mosquitto.attribute("topic").value(topic,sizeof(topic));
     mosquitto.attribute("subscribe").value(subscribe,sizeof(subscribe));
-
-    PDBG("Connecting to MQTT server");
+    PDBG("Connecting to MQTT server %s %s %s", id, topic, subscribe);
+    //PDBG("Connecting to MQTT server");
     // Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo", ip_addr);
     Mqtt_Entity *mqtt_entity = new Mqtt_Entity(id, topic, ip_addr);
     mqtt_entity->my_subscribe(subscribe);

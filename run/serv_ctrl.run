@@ -5,11 +5,13 @@ set build_components {
 	core init
 	drivers/timer
 	drivers/usb
-	drivers/gpio
 	server/usb_terminal
 	server/servo_controller
 	test/ctrl
 }
+
+
+lappend_if [have_spec gpio]             build_components drivers/gpio
 
 source ${genode_dir}/repos/base/run/platform_drv.inc
 append_platform_drv_build_components
@@ -67,7 +69,7 @@ append config {
 		<provides><service name="Terminal"/></provides>
 	</start>
 	<start name="servo_controller">
-		<resource name="RAM" quantum="1M"/>
+		<resource name="RAM" quantum="4M"/>
 		<provides><service name="Servo Controller"/></provides>
 	</start>
 	<start name="test_ctrl">
@@ -83,10 +85,17 @@ install_config $config
 
 # generic modules
 set boot_modules {
-	core init timer gpio_drv usb_drv usb_terminal
-	servo_controller test_ctrl
+	core init timer usb_drv servo_controller test_ctrl
+	usb_terminal
 }
+
+lappend_if [have_spec gpio]             boot_modules gpio_drv
 
 append_platform_drv_boot_modules
 
 build_boot_image $boot_modules
+
+#append qemu_args " -m 256 -nographic -usb  -usbdevice host:$usb_raw_device -nographic"
+
+
+#run_genode_until forever

@@ -6,7 +6,7 @@ set use_nic_driver [expr !$use_usb_driver && ![have_spec imx53] && ![have_spec h
 
 if {[expr !$use_usb_driver && !$use_nic_driver]} {
 	puts "\n Run script is not supported on this platform. \n"; exit 0 }
-
+	  
 set build_components { core 
 					   init 
 					   server/usb_terminal 
@@ -76,8 +76,10 @@ set config {
                 <service name="Usb"/>
         </provides>
         <config uhci="yes" ehci="yes" xhci="yes">
-            <nic mac="02:00:00:00:01:04"/>
-            <raw/>
+            <nic mac="0A:03:00:00:00:02"/>
+	    <raw>
+		<policy label="usb_terminal -> usb_serial" vendor_id="0x67b" product_id="0x2303"/>
+            </raw>
         </config>
     </start>
 
@@ -90,7 +92,7 @@ set config {
 		<resource name="RAM" quantum="4M"/>
 		<config>
 			<network dhcp="yes" ip-address="192.168.100.42" subnet-mask="255.255.255.0" default-gateway="192.168.100.254" />
-			<mosquitto ip-address="10.200.32.15" port="1883" id="rpi" topic="car-status" subscribe="car-servo"/>
+			<mosquitto ip-address="10.200.32.75" port="1883" id="rpi" topic="car-status" subscribe="car-servo"/>
         </config>
 	</start>
 

@@ -51,11 +51,11 @@ void Mqtt_Entity::on_connect(int rc) {
 };
 
 void Mqtt_Entity::on_disconnect(int rc) {
-    PDBG("Mqtt_Entity - disconnected from server");
+    //PDBG("Mqtt_Entity - disconnected from server");
 };
 
 void Mqtt_Entity::on_publish(int mid) {
-    PDBG("Mqtt_Entity - message %d published", mid);
+    //PDBG("Mqtt_Entity - message %d published", mid);
 };
 
 void Mqtt_Entity::on_message(const struct mosquitto_message *message) {

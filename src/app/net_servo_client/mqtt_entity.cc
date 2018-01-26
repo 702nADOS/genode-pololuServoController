@@ -1,6 +1,7 @@
 #include "mqtt_entity.h"
 
 #include <string.h>
+#include <errno.h>
 #include <stdio.h>
 #include <base/printf.h>
 
@@ -11,7 +12,15 @@ Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic, const char* host)
 
         // init mosquitto, set params and start loop
         mosqpp::lib_init();
-        connect(host, 1883, 60);
+        int result = connect(host, 1883, 60);
+        switch(result) {
+            case MOSQ_ERR_SUCCESS:  PERR("On Success");
+                break;
+            case MOSQ_ERR_INVAL: PERR("Input parameters are invalid");
+                break;
+            case MOSQ_ERR_ERRNO: PERR("Error %s", strerror(errno));
+                break;
+        };
         loop_start();
     }
 
@@ -51,11 +60,11 @@ void Mqtt_Entity::on_connect(int rc) {
 };
 
 void Mqtt_Entity::on_disconnect(int rc) {
-    PDBG("Mqtt_Entity - disconnected from server");
+    //PDBG("Mqtt_Entity - disconnected from server");
 };
 
 void Mqtt_Entity::on_publish(int mid) {
-    PDBG("Mqtt_Entity - message %d published", mid);
+    //PDBG("Mqtt_Entity - message %d published", mid);
 };
 
 void Mqtt_Entity::on_message(const struct mosquitto_message *message) {

@@ -17,8 +17,8 @@ int main(int, char **)
     servo_controller.say_hello();
 
     // Testcases
-    unsigned char channel = 0;
-    unsigned short targets[] = {6000, 8000};
+    unsigned char channel = 6;
+    unsigned short targets[] = {4000, 8000};
     while(1) {
 	servo_controller.set_target(channel, targets[0]);
 	// get position
