@@ -24,6 +24,8 @@ https://argos-research.github.io/documentation/install.html#operating-system-on-
 2. Clone the genode-world under genode/repos (assuming you are in the operating-system directory)
 ```
 git clone https://github.com/argos-research/genode-world.git genode/repos/genode-world
+cd genode/repos/genode-world
+git checkout protobuf_3.5.0
 ```
 
 3. Clone this repository into genode/repos (assuming you are in the operating-system directory)
